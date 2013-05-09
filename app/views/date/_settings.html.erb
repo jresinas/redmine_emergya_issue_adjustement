@@ -1,0 +1,4 @@
+Tipos de peticiones afectadas:
+<%= select_tag 'settings[trackers]',
+  options_from_collection_for_select(Tracker.all, :id, :name,
+    (@settings['trackers'] || []).collect{|tracker| tracker.to_i}), :multiple => true %>
