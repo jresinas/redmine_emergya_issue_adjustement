@@ -1,0 +1,44 @@
+<fieldset>
+Tipos de peticiones afectadas:
+<%= select_tag 'settings[trackers]',
+  options_from_collection_for_select(Tracker.all, :id, :name,
+    (@settings['trackers'] || []).collect{|tracker| tracker.to_i}), :multiple => true %>
+</fieldset>
+<br>
+
+<fieldset>
+<% 
+  options = ['Bajo', 'Medio', 'Alto']
+  impact = ['Leve', 'Moderado', 'Importante']
+  probability = ['Baja', 'Media', 'Elevada']
+%>
+
+Niveles de exposicion:
+  <table border="1">
+    <tbody>
+      <tr>
+        <td></td>
+	<th colspan="<%= probability.length+1 %>">Probabilidad</th>
+      </tr>
+      <tr>
+        <th rowspan="<%= impact.length+1 %>">Impacto</th>
+	<td></td>
+        <% probability.each do |pLevel| %>
+        <th><%= pLevel %></th>
+        <% end %>
+      </tr>
+      <% impact.each do |iLevel| %>
+      <tr>
+        <th><%= iLevel %></th>
+        <% probability.each do |pLevel| %>
+        <td>
+        <%= 
+          select("settings[expositionLevels]["+iLevel+"]", pLevel, options, :selected => ExpositionLevel.getExpositionLevelValue(iLevel,pLevel)) 
+        %>
+        </td>
+        <% end %>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</fieldset>

@@ -12,6 +12,7 @@
 #require 'redmine'
 require 'issues_dates_required_patch'
 #require 'issues_controller_tracker_patch'
+require_dependency 'hooks'
 
 Redmine::Plugin.register :redmine_emergya_issue_adjustement do
   name 'Emergya Issue Adjustement Plugin'
@@ -20,5 +21,5 @@ Redmine::Plugin.register :redmine_emergya_issue_adjustement do
   version '0.0.2'
   author_url 'http://www.emergya.es'
 
-  settings :default => { :trackers => []}, :partial => 'date/settings'
+  settings :default => { :trackers => []}, :partial => 'settings/settings'
 end
