@@ -14,43 +14,19 @@
 <% if (@issue.tracker_id==ExpositionLevel.getTrackerId('Riesgos')) %>
 <script>
   var nivelExposicion = document.getElementById("<%= ExpositionLevel.getCustomFieldId('Nivel de Exposición') %>");
-  var nivelExposicionOptions = nivelExposicion.getElementsByTagName('option');
-  var impacto = document.getElementById("<%= ExpositionLevel.getCustomFieldId('Impacto') %>");
-  var probabilidad = document.getElementById("<%= ExpositionLevel.getCustomFieldId('Probabilidad') %>");
-
-  for (i=0; i<nivelExposicionOptions.length; i++){
-    nivelExposicionOptions[i].disabled=true;
-  }
+  nivelExposicion.options.length = 0;
 
   nivelExposicion.onfocus = function(){
     nivelExposicion.blur();
   }
-  
-  if (window.addEventListener) {  // W3C DOM
-    impacto.addEventListener('change',updateExposition,false);
-    probabilidad.addEventListener('change',updateExposition,false);
-  } else if (window.attachEvent) { // IE DOM
-    impacto.attachEvent('onchange',updateExposition);
-    probabilidad.attachEvent('onchange',updateExposition);
-  }
-
-  function updateExposition(){
-    arrayNivelesExposicion = <%= (ExpositionLevel.getExpositionLevelsArray).to_json %>
-    
-    if (impacto.value!="" && probabilidad.value!=""){
-      nivelExposicion.value=arrayNivelesExposicion[impacto.value][probabilidad.value];
-      disableExpositionLevelOptions();
-    }
-  }
-
-  function disableExpositionLevelOptions(){
-    for (i=0; i<nivelExposicionOptions.length; i++){
-      if (nivelExposicionOptions[i].value==nivelExposicion.value){
-        nivelExposicionOptions[i].disabled=false;
-      } else {
-        nivelExposicionOptions[i].disabled=true;
-      }
-    }
-  }
 </script>
+
+<% impacto_id = ExpositionLevel.getCustomFieldId('Impacto') %>
+<% probabilidad_id = ExpositionLevel.getCustomFieldId('Probabilidad') %>
+<% exposicion_id = ExpositionLevel.getCustomFieldId('Nivel de Exposición') %>
+
+<%= observe_field impacto_id, :update => exposicion_id, :with => "'impacto='+document.getElementById("'"'+impacto_id+'"'").value+'&probabilidad='+document.getElementById("'"'+probabilidad_id+'"'").value", :url => {:controller => 'issues', :action => 'get_exposition_level'} %>
+
+<%= observe_field probabilidad_id, :update => exposicion_id, :with => "'impacto='+document.getElementById("'"'+impacto_id+'"'").value+'&probabilidad='+document.getElementById("'"'+probabilidad_id+'"'").value", :url => {:controller => 'issues', :action => 'get_exposition_level'} %>
+
 <% end %>

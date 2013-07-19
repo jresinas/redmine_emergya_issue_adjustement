@@ -5,12 +5,12 @@ class ExpositionLevel
     'Importante' => {'Baja' =>'Medio', 'Media' =>'Alto', 'Elevada' =>'Alto'}
   }
 
-  def self.getExpositionLevelsArray
-    return (Setting.plugin_redmine_emergya_issue_adjustement['expositionLevels'] || DEFAULT_VALUES)
-  end
-
   def self.getExpositionLevelValue(impact, probability)
-    return (Setting.plugin_redmine_emergya_issue_adjustement['expositionLevels'][impact][probability] || DEFAULT_VALUES[impact][probability])
+    if Setting.plugin_redmine_emergya_issue_adjustement['expositionLevels'].present?
+      return Setting.plugin_redmine_emergya_issue_adjustement['expositionLevels'][impact][probability]
+    else 
+      return DEFAULT_VALUES[impact][probability]
+    end
   end
 
   def self.getCustomFieldId(name)

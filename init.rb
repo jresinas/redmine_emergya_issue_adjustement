@@ -12,11 +12,12 @@
 #require 'redmine'
 require 'issues_dates_required_patch'
 #require 'issues_controller_tracker_patch'
+require 'issues_controller_patch'
 require_dependency 'hooks'
 
 Redmine::Plugin.register :redmine_emergya_issue_adjustement do
   name 'Emergya Issue Adjustement Plugin'
-  author 'ogonzalez'
+  author 'ogonzalez, jresinas'
   description 'Issue/Tracker behaviour changes adjusting to Emergya workflows'
   version '0.0.2'
   author_url 'http://www.emergya.es'
