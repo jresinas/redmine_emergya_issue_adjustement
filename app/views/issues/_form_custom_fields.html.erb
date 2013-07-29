@@ -14,7 +14,9 @@
 <% if (@issue.tracker_id==ExpositionLevel.getTrackerId('Riesgos')) %>
 <script>
   var nivelExposicion = document.getElementById("<%= ExpositionLevel.getCustomFieldId('Nivel de Exposición') %>");
+  nivelExposicionValue = nivelExposicion.value;
   nivelExposicion.options.length = 0;
+  nivelExposicion.options[0] = new Option(nivelExposicionValue,nivelExposicionValue);
 
   nivelExposicion.onfocus = function(){
     nivelExposicion.blur();
