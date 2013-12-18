@@ -1,19 +1,28 @@
+<div class="splitcontent">
 <div class="splitcontentleft">
 <% i = 0 %>
 <% split_on = (@issue.custom_field_values.size / 2.0).ceil - 1 %>
-<% @issue.custom_field_values.each do |value| %>
-  <p><%= custom_field_tag_with_label :issue, value %></p>
+<% @issue.editable_custom_field_values.each do |value| %>
+  <p><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
 <% if i == split_on -%>
 </div><div class="splitcontentright">
 <% end -%>
 <% i += 1 -%>
 <% end -%>
 </div>
-<div style="clear:both;"> </div>
+</div>
+
+
 
 <% if (@issue.tracker_id==ExpositionLevel.getTrackerId('Riesgos')) %>
-<script>
-  var nivelExposicion = document.getElementById("<%= ExpositionLevel.getCustomFieldId('Nivel de Exposición') %>");
+
+<script type="text/javascript">
+  impacto_id = "#<%=ExpositionLevel.getCustomFieldId('Impacto')%>"
+  probabilidad_id = "#<%=ExpositionLevel.getCustomFieldId('Probabilidad')%>"
+  exposicion_id = "#<%=ExpositionLevel.getCustomFieldId('Nivel de Exposición')%>"
+  project_name = "<%=params[:project_id]%>"
+
+  var nivelExposicion = document.getElementById("<%=ExpositionLevel.getCustomFieldId('Nivel de Exposición')%>");
   nivelExposicionValue = nivelExposicion.value;
   nivelExposicion.options.length = 0;
   nivelExposicion.options[0] = new Option(nivelExposicionValue,nivelExposicionValue);
@@ -21,14 +30,17 @@
   nivelExposicion.onfocus = function(){
     nivelExposicion.blur();
   }
+  
+  $(impacto_id).change(function(){
+    $(exposicion_id).load("/projects/"+project_name+"/issues/get_exposition_level", {impacto: $(impacto_id).val(), probabilidad: $(probabilidad_id).val()});
+  });
+
+  $(probabilidad_id).change(function(){
+    $(exposicion_id).load("/projects/"+project_name+"/issues/get_exposition_level", {impacto: $(impacto_id).val(), probabilidad: $(probabilidad_id).val()});
+  });
 </script>
 
-<% impacto_id = ExpositionLevel.getCustomFieldId('Impacto') %>
-<% probabilidad_id = ExpositionLevel.getCustomFieldId('Probabilidad') %>
-<% exposicion_id = ExpositionLevel.getCustomFieldId('Nivel de Exposición') %>
-
-<%= observe_field impacto_id, :update => exposicion_id, :with => "'impacto='+document.getElementById("'"'+impacto_id+'"'").value+'&probabilidad='+document.getElementById("'"'+probabilidad_id+'"'").value", :url => {:controller => 'issues', :action => 'get_exposition_level'} %>
-
-<%= observe_field probabilidad_id, :update => exposicion_id, :with => "'impacto='+document.getElementById("'"'+impacto_id+'"'").value+'&probabilidad='+document.getElementById("'"'+probabilidad_id+'"'").value", :url => {:controller => 'issues', :action => 'get_exposition_level'} %>
-
 <% end %>
+
+
+

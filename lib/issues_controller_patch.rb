@@ -1,4 +1,4 @@
-require 'dispatcher'
+require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
 require_dependency 'issues_controller'
 
 
@@ -22,6 +22,7 @@ module IssuesControllerPatch
 
       if (impacto.present? && probabilidad.present?)
         @exposicion = ExpositionLevel.getExpositionLevelValue(impacto,probabilidad)
+        render :text => "<option value='"+@exposicion+"'>"+@exposicion+"</option>".html_safe
       else 
         render :nothing => true
       end
@@ -32,6 +33,12 @@ module IssuesControllerPatch
   end
 end
 
-Dispatcher.to_prepare do
-  IssuesController.send(:include, IssuesControllerPatch)
+if Rails::VERSION::MAJOR >= 3
+  ActionDispatch::Callbacks.to_prepare do
+    IssuesController.send(:include, IssuesControllerPatch)
+  end
+else
+  Dispatcher.to_prepare do
+    IssuesController.send(:include, IssuesControllerPatch)
+  end
 end

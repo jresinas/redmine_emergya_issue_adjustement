@@ -1,10 +1,16 @@
 #require 'dispatcher'
-
-Dispatcher.to_prepare do
-#ActionDispatch::Callbacks.to_prepare do
-  require_dependency 'issue'
-  Issue.send(:include, IssuesDatesRequiredPatch)
+if Rails::VERSION::MAJOR >= 3
+  ActionDispatch::Callbacks.to_prepare do
+    require_dependency 'issue'
+    Issue.send(:include, IssuesDatesRequiredPatch)
+  end
+else
+  Dispatcher.to_prepare do
+    require_dependency 'issue'
+    Issue.send(:include, IssuesDatesRequiredPatch)
+  end
 end
+
 
 module IssuesDatesRequiredPatch
 

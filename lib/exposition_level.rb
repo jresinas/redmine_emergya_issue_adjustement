@@ -14,7 +14,7 @@ class ExpositionLevel
   end
 
   def self.getCustomFieldId(name)
-    return "issue_custom_field_values_"+(CustomField.find(:first, :conditions => ["name = '"+name+"'"]).id).to_s
+    return "issue_custom_field_values_"+(CustomField.find_by_name(name).id).to_s
   end
 
   def self.getTrackerId(name)
