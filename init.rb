@@ -13,6 +13,7 @@
 require 'issues_dates_required_patch'
 #require 'issues_controller_tracker_patch'
 require 'issues_controller_patch'
+require 'timelog_helper_patch'
 require_dependency 'hooks'
 
 Redmine::Plugin.register :redmine_emergya_issue_adjustement do
