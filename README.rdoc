@@ -4,8 +4,13 @@ Several issue/tracker behaviour changes to adjust to Emergya workflows:
 
 * Dates Required: make start date required to save an issue, and due date required to close it.
 
-
 * Allows tracker selection configuration in settings.
+
+* When an issue is closed, the % done is automatically setted to 100%.
+
+* In Risk trackers, the exposition level is automatically set according to the defined table in the plugin configuration setting.
+
+* Shows alphabetically ordered some Redmine filters list
 
 == Install
 
