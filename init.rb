@@ -18,7 +18,7 @@ require 'hooks'
 
 Rails.configuration.to_prepare do
   TimelogController.send(:helper, :queries)
-  IssuesController.send(:helper, :queries)
+#  IssuesController.send(:helper, :queries)
 end
 
 Redmine::Plugin.register :redmine_emergya_issue_adjustement do
